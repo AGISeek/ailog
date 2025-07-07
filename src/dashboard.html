@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commit Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: var(--vscode-font-family, sans-serif);
+            padding: 20px;
+            color: var(--vscode-foreground);
+            background-color: var(--vscode-editor-background);
+        }
+        h1, h2 {
+            color: var(--vscode-foreground);
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .metrics {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .metric {
+            text-align: center;
+        }
+        input, button {
+            border: 1px solid var(--vscode-input-border);
+            background-color: var(--vscode-input-background);
+            color: var(--vscode-input-foreground);
+            padding: 5px;
+        }
+        button:hover {
+            background-color: var(--vscode-button-hover-background);
+        }
+    </style>
+</head>
+<body>
+    <h1>Commit Dashboard</h1>
+    <div class="filters">
+        <label for="repo-filter">Repository:</label>
+        <input type="text" id="repo-filter" placeholder="e.g., my-project"/>
+        <label for="branch-filter">Branch:</label>
+        <input type="text" id="branch-filter" placeholder="e.g., main"/>
+        <button id="filter-button">Filter</button>
+        <button id="clear-filter-button">Clear</button>
+    </div>
+    <div class="metrics">
+        <div class="metric">
+            <h2>AI / Total Commits</h2>
+            <p id="ai-commit-ratio">N/A</p>
+        </div>
+        <div class="metric">
+            <h2>AI / Total Lines</h2>
+            <p id="ai-lines-ratio">N/A</p>
+        </div>
+    </div>
+    <div>
+        <canvas id="commit-chart"></canvas>
+    </div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        const filterButton = document.getElementById('filter-button');
+        const clearFilterButton = document.getElementById('clear-filter-button');
+        const repoFilter = document.getElementById('repo-filter');
+        const branchFilter = document.getElementById('branch-filter');
+
+        filterButton.addEventListener('click', () => {
+            vscode.postMessage({
+                command: 'getCommits',
+                repo: repoFilter.value,
+                branch: branchFilter.value
+            });
+        });
+
+        clearFilterButton.addEventListener('click', () => {
+            repoFilter.value = '';
+            branchFilter.value = '';
+            vscode.postMessage({
+                command: 'getCommits'
+            });
+        });
+
+        let chart;
+
+        function getChartOptions() {
+            const bodyStyles = getComputedStyle(document.body);
+            const textColor = bodyStyles.getPropertyValue('--vscode-foreground');
+            const gridColor = bodyStyles.getPropertyValue('--vscode-editor-widget-border');
+
+            return {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: textColor },
+                        grid: { color: gridColor }
+                    },
+                    x: {
+                        ticks: { color: textColor },
+                        grid: { color: gridColor }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: textColor
+                        }
+                    }
+                }
+            };
+        }
+
+        window.addEventListener('message', event => {
+            const message = event.data;
+            switch (message.command) {
+                case 'loadCommits':
+                    const commits = message.commits;
+                    if (!commits) return;
+
+                    const aiCommits = commits.filter(c => c.is_ai_generated).length;
+                    const totalCommits = commits.length;
+                    document.getElementById('ai-commit-ratio').textContent = `${aiCommits} / ${totalCommits}`;
+
+                    const aiLines = commits.filter(c => c.is_ai_generated).reduce((sum, c) => sum + c.code_volume_delta, 0);
+                    const totalLines = commits.reduce((sum, c) => sum + c.code_volume_delta, 0);
+                    document.getElementById('ai-lines-ratio').textContent = `${aiLines} / ${totalLines}`;
+
+                    // Group by day
+                    const commitsByDay = commits.reduce((acc, commit) => {
+                        const day = new Date(commit.commit_time).toLocaleDateString();
+                        if (!acc[day]) {
+                            acc[day] = { totalLines: 0, aiLines: 0 };
+                        }
+                        acc[day].totalLines += commit.code_volume_delta;
+                        if (commit.is_ai_generated) {
+                            acc[day].aiLines += commit.code_volume_delta;
+                        }
+                        return acc;
+                    }, {});
+
+                    const labels = Object.keys(commitsByDay);
+                    const totalLinesData = Object.values(commitsByDay).map(d => d.totalLines);
+                    const aiLinesData = Object.values(commitsByDay).map(d => d.aiLines);
+
+                    if (chart) {
+                        chart.destroy();
+                    }
+                    const ctx = document.getElementById('commit-chart').getContext('2d');
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Total Lines (Delta)',
+                                    data: totalLinesData,
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: 'AI Lines (Delta)',
+                                    data: aiLinesData,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    tension: 0.1
+                                }
+                            ]
+                        },
+                        options: getChartOptions()
+                    });
+                    break;
+            }
+        });
+
+        // Initial load
+        vscode.postMessage({ command: 'getCommits' });
+    </script>
+</body>
+</html>

@@ -19,6 +19,17 @@
 			{
 				"command": "watch-cursor.installGitHook",
 				"title": "Watch Cursor: Install Git Hook for AI Attribution"
+			},
+			{
+				"command": "watch-cursor.toggleAiGenerated",
+				"title": "Watch Cursor: Toggle AI Generated"
+			},
+			{
+				"command": "watch-cursor.showDashboard",
+				"title": "Watch Cursor: Show Dashboard"
+			},
+			{
+				"command": "watch-cursor.processCommit"
 			}
 		]
 	},
@@ -28,9 +39,15 @@
 		"watch": "tsc -watch -p ./",
 		"lint": "eslint src --ext ts"
 	},
+	"dependencies": {
+		"chart.js": "^4.5.0",
+		"simple-git": "^3.22.0",
+		"sqlite3": "^5.1.7"
+	},
 	"devDependencies": {
-		"@types/vscode": "^1.85.0",
 		"@types/node": "18.x",
+		"@types/sqlite3": "^3.1.11",
+		"@types/vscode": "^1.85.0",
 		"@typescript-eslint/eslint-plugin": "^6.15.0",
 		"@typescript-eslint/parser": "^6.15.0",
 		"eslint": "^8.56.0",

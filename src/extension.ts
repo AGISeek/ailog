@@ -1,107 +1,14 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as child_process from 'child_process';
+import simpleGit, { SimpleGit } from 'simple-git';
+import { connectToDatabase, insertCommit, getCommits, Commit } from './database';
 
-// #############################################################################
-// ##                                                                         ##
-// ##  的核心逻辑：VS Code 插件                                                 ##
-// ##                                                                         ##
-// #############################################################################
-
-/**
- * 这是一个简化的AI活动检测器。
- * 在真实场景中，我们不会直接监听`cursor.accept`等命令，因为这很脆弱。
- * 相反，我们监听文本变化，并使用启发式方法来猜测这是否是AI操作。
- *
- * 启发式方法:
- * 1.  **代码块体积 (Chunk Size)**: 一次性插入大量代码 (>10行)。
- * 2.  **插入速度 (Velocity)**: 在极短时间内（<150毫秒）发生多次修改。
- *
- * 这是对您在上下文中描述的“代码静态特征分析”的直接实现。
- */
-
-// 用于跟踪最近的文本更改事件，以计算速度
-let lastChangeTimestamp = 0;
-let recentChanges = 0;
-
-function logAIActivity(document: vscode.TextDocument) {
-    if (!vscode.workspace.workspaceFolders) {
-        return;
-    }
-    // 我们只关心工作区内的文件
-    const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
-    if (!workspaceFolder) {
-        return;
-    }
-
-    const logFilePath = path.join(workspaceFolder.uri.fsPath, '.git', 'ai_activity.log');
-    const logDirectory = path.dirname(logFilePath);
-
-    // 确保.git/hooks目录存在
-    if (!fs.existsSync(logDirectory)) {
-        // 如果没有.git目录，说明不是一个git仓库，直接返回
-        return;
-    }
-
-    const logEntry = {
-        fsPath: document.uri.fsPath,
-        timestamp: Date.now()
-    };
-
-    // 将活动记录为JSON行，追加到日志文件中
-    fs.appendFileSync(logFilePath, JSON.stringify(logEntry) + '\n');
-    console.log(`[Watch Cursor] AI activity detected and logged for: ${document.uri.fsPath}`);
-}
+let isAiGenerated = false;
+let statusBarItem: vscode.StatusBarItem;
 
 
-function onDidChangeTextDocument(event: vscode.TextDocumentChangeEvent) {
-    // 守卫：只处理真实的文件系统文档，忽略虚拟文档（如git commit输入框）
-    if (event.document.uri.scheme !== 'file') {
-        return;
-    }
 
-    // 忽略由插件自身或其他工具（如格式化）引起的、非用户输入的更改
-    if (event.contentChanges.length === 0) {
-        return;
-    }
-
-    const now = Date.now();
-    const timeSinceLastChange = now - lastChangeTimestamp;
-    lastChangeTimestamp = now;
-
-    // --- 启发式检测逻辑 ---
-
-    // 1. 速度检测：如果在150毫秒内发生多次更改，则有可能是AI操作
-    if (timeSinceLastChange < 150) {
-        recentChanges++;
-        if (recentChanges > 2) { // 连续3次或以上的快速更改
-            console.log(`[Watch Cursor] High velocity change detected.`);
-            logAIActivity(event.document);
-            recentChanges = 0; // 重置计数器
-            return;
-        }
-    } else {
-        recentChanges = 0; // 如果间隔时间长，则重置计数器
-    }
-
-    // 2. 体积检测：检查单次插入的行数
-    for (const change of event.contentChanges) {
-        const addedLines = change.text.split('\n').length;
-        // 如果一次性增加了超过10行代码，我们有理由相信这是AI生成的
-        if (addedLines > 10) {
-            console.log(`[Watch Cursor] Large chunk insertion detected (${addedLines} lines).`);
-            logAIActivity(event.document);
-            return; // 记录一次即可
-        }
-    }
-}
-
-// #############################################################################
-// ##                                                                         ##
-// ##  安装与激活                                                             ##
-// ##                                                                         ##
-// #############################################################################
 
 function installGitHook() {
     if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
@@ -117,35 +24,126 @@ function installGitHook() {
         return;
     }
 
-    // install_hook.sh 脚本应该与 extension.js 在同一目录中
-    const scriptPath = path.join(__dirname, '..', 'install_hook.sh');
-
-    if (!fs.existsSync(scriptPath)) {
-         vscode.window.showErrorMessage(`Installation script not found at ${scriptPath}.`);
-         return;
+    const hooksDir = path.join(gitDir, 'hooks');
+    if (!fs.existsSync(hooksDir)) {
+        fs.mkdirSync(hooksDir);
     }
 
-    // 赋予脚本执行权限并在项目根目录运行它
-    try {
-        child_process.execSync(`chmod +x "${scriptPath}"`, { cwd: workspaceRoot });
-        const output = child_process.execSync(`"${scriptPath}"`, { cwd: workspaceRoot });
-        vscode.window.showInformationMessage(output.toString());
-    } catch (error: any) {
-        vscode.window.showErrorMessage(`Failed to install Git hook: ${error.message}`);
-    }
+    const postCommitHookPath = path.join(hooksDir, 'post-commit');
+    const hookScript = '#!/bin/sh\n' + 'exec code --command watch-cursor.processCommit\n';
+
+    fs.writeFileSync(postCommitHookPath, hookScript, { mode: 0o755 });
+    vscode.window.showInformationMessage('Git post-commit hook installed successfully.');
 }
+
+
+function updateStatusBar() {
+    statusBarItem.text = `AI Generated: ${isAiGenerated ? '✅' : '❌'}`;
+    statusBarItem.tooltip = 'Click to toggle if the commit is AI generated';
+}
+
+function createDashboardPanel(context: vscode.ExtensionContext) {
+    const panel = vscode.window.createWebviewPanel(
+        'commitDashboard',
+        'Commit Dashboard',
+        vscode.ViewColumn.One,
+        {
+            enableScripts: true,
+            localResourceRoots: [
+                vscode.Uri.joinPath(context.extensionUri, 'src'),
+                vscode.Uri.joinPath(context.extensionUri, 'node_modules')
+            ]
+        }
+    );
+
+    panel.webview.html = getWebviewContent(context, panel.webview);
+
+    panel.webview.onDidReceiveMessage(async message => {
+        switch (message.command) {
+            case 'getCommits':
+                const repo = message.repo || undefined;
+                const branch = message.branch || undefined;
+                const commits = await getCommits(repo, branch);
+                panel.webview.postMessage({ command: 'loadCommits', commits });
+                return;
+        }
+    });
+}
+
+function getWebviewContent(context: vscode.ExtensionContext, webview: vscode.Webview) {
+    const htmlPath = vscode.Uri.joinPath(context.extensionUri, 'src', 'dashboard.html');
+    let htmlContent = fs.readFileSync(htmlPath.fsPath, 'utf8');
+
+    const chartjsUri = webview.asWebviewUri(vscode.Uri.joinPath(
+        context.extensionUri, 'node_modules', 'chart.js', 'dist', 'chart.umd.js'
+    ));
+
+    htmlContent = htmlContent.replace(
+        '"https://cdn.jsdelivr.net/npm/chart.js"',
+        `"${chartjsUri.toString()}"`
+    );
+
+    return htmlContent;
+}
+
 
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('[Watch Cursor] Extension is now active.');
 
-    // 注册安装命令
-    const installCommand = vscode.commands.registerCommand('watch-cursor.installGitHook', installGitHook);
-    context.subscriptions.push(installCommand);
+    connectToDatabase();
 
-    // 注册核心的文本更改监听器
-    const disposable = vscode.workspace.onDidChangeTextDocument(onDidChangeTextDocument);
-    context.subscriptions.push(disposable);
+    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    statusBarItem.command = 'watch-cursor.toggleAiGenerated';
+    updateStatusBar();
+    statusBarItem.show();
+
+    const toggleAiCommand = vscode.commands.registerCommand('watch-cursor.toggleAiGenerated', () => {
+        isAiGenerated = !isAiGenerated;
+        updateStatusBar();
+    });
+
+    const dashboardCommand = vscode.commands.registerCommand('watch-cursor.showDashboard', () => {
+        createDashboardPanel(context);
+    });
+
+    const installHookCommand = vscode.commands.registerCommand('watch-cursor.installGitHook', installGitHook);
+
+    const processCommitCommand = vscode.commands.registerCommand('watch-cursor.processCommit', async () => {
+        if (vscode.workspace.workspaceFolders) {
+            const workspaceRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+            const git: SimpleGit = simpleGit(workspaceRoot);
+            try {
+                const log = await git.log({ n: 1 });
+                const latestCommit = log.latest;
+                if (latestCommit) {
+                    const repo = path.basename(workspaceRoot);
+                    const branch = await git.branch();
+                    const diffSummary = await git.diffSummary(['HEAD^', 'HEAD']);
+
+                    const commitData: Commit = {
+                        commit_time: new Date(latestCommit.date).getTime(),
+                        commit_hash: latestCommit.hash,
+                        repo: repo,
+                        branch: branch.current,
+                        committer: latestCommit.author_name,
+                        is_ai_generated: isAiGenerated,
+                        code_volume_delta: diffSummary.insertions - diffSummary.deletions,
+                        code_write_speed_delta: 0, // Placeholder
+                        notes: latestCommit.message
+                    };
+                    await insertCommit(commitData);
+                    console.log('Commit data saved');
+                    isAiGenerated = false; // Reset after commit
+                    updateStatusBar();
+                }
+            } catch (error) {
+                console.error('Failed to process commit:', error);
+            }
+        }
+    });
+
+    context.subscriptions.push(toggleAiCommand, dashboardCommand, installHookCommand, processCommitCommand, statusBarItem);
 
     vscode.window.showInformationMessage(
         'Watch Cursor is active. Run "Watch Cursor: Install Git Hook" from the Command Palette to complete setup.',
@@ -156,6 +154,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 }
+
 
 export function deactivate() {
     console.log('[Watch Cursor] Extension deactivated.');
