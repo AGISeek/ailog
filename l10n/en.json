@@ -1,0 +1,19 @@
+{
+    "statusBar.aiGenerated": "AI Generated: {0}",
+    "statusBar.tooltip": "Click to toggle if the commit is AI generated",
+    "messages.hookInstalled": "AIlog Git hook installed successfully.",
+    "messages.hookInstallFail": "Failed to install AIlog Git hook: {0}",
+    "messages.notGitRepo": "This does not seem to be a Git repository. Please run 'git init' first.",
+    "messages.noProjectFolder": "Please open a project folder to install the Git hook.",
+    "messages.initialization": "AIlog is active. Run '{0}' from the Command Palette to complete setup.",
+    "messages.installHookButton": "Install Hook",
+    "dashboard.title": "Commit Dashboard",
+    "dashboard.repoFilter": "Repository:",
+    "dashboard.branchFilter": "Branch:",
+    "dashboard.filterButton": "Filter",
+    "dashboard.clearButton": "Clear",
+    "dashboard.aiCommitRatio": "AI / Total Commits",
+    "dashboard.aiLinesRatio": "AI / Total Lines",
+    "dashboard.totalLinesDelta": "Total Lines (Delta)",
+    "dashboard.aiLinesDelta": "AI Lines (Delta)"
+}

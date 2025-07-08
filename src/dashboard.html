@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commit Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>{{dashboard.title}}</title>
+    <script src="{{chartjsUri}}"></script>
     <style>
         body {
             font-family: var(--vscode-font-family, sans-serif);
@@ -38,22 +38,22 @@
     </style>
 </head>
 <body>
-    <h1>Commit Dashboard</h1>
+    <h1>{{dashboard.title}}</h1>
     <div class="filters">
-        <label for="repo-filter">Repository:</label>
+        <label for="repo-filter">{{dashboard.repoFilter}}</label>
         <input type="text" id="repo-filter" placeholder="e.g., my-project"/>
-        <label for="branch-filter">Branch:</label>
+        <label for="branch-filter">{{dashboard.branchFilter}}</label>
         <input type="text" id="branch-filter" placeholder="e.g., main"/>
-        <button id="filter-button">Filter</button>
-        <button id="clear-filter-button">Clear</button>
+        <button id="filter-button">{{dashboard.filterButton}}</button>
+        <button id="clear-filter-button">{{dashboard.clearButton}}</button>
     </div>
     <div class="metrics">
         <div class="metric">
-            <h2>AI / Total Commits</h2>
+            <h2>{{dashboard.aiCommitRatio}}</h2>
             <p id="ai-commit-ratio">N/A</p>
         </div>
         <div class="metric">
-            <h2>AI / Total Lines</h2>
+            <h2>{{dashboard.aiLinesRatio}}</h2>
             <p id="ai-lines-ratio">N/A</p>
         </div>
     </div>
@@ -154,13 +154,13 @@
                             labels: labels,
                             datasets: [
                                 {
-                                    label: 'Total Lines (Delta)',
+                                    label: '{{dashboard.totalLinesDelta}}',
                                     data: totalLinesData,
                                     borderColor: 'rgba(75, 192, 192, 1)',
                                     tension: 0.1
                                 },
                                 {
-                                    label: 'AI Lines (Delta)',
+                                    label: '{{dashboard.aiLinesDelta}}',
                                     data: aiLinesData,
                                     borderColor: 'rgba(255, 99, 132, 1)',
                                     tension: 0.1

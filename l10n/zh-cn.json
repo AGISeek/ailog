@@ -1,0 +1,19 @@
+{
+    "statusBar.aiGenerated": "AI 生成: {0}",
+    "statusBar.tooltip": "点击切换当前提交是否由 AI 生成",
+    "messages.hookInstalled": "智迹 Git 钩子安装成功。",
+    "messages.hookInstallFail": "安装智迹 Git 钩子失败: {0}",
+    "messages.notGitRepo": "这似乎不是一个 Git 仓库。请先运行 'git init'。",
+    "messages.noProjectFolder": "请先打开一个项目文件夹以安装 Git 钩子。",
+    "messages.initialization": "智迹已激活。请从命令面板运行“{0}”以完成设置。",
+    "messages.installHookButton": "安装钩子",
+    "dashboard.title": "提交仪表盘",
+    "dashboard.repoFilter": "代码仓库:",
+    "dashboard.branchFilter": "分支:",
+    "dashboard.filterButton": "筛选",
+    "dashboard.clearButton": "清除",
+    "dashboard.aiCommitRatio": "AI 提交 / 总提交",
+    "dashboard.aiLinesRatio": "AI 代码行 / 总代码行",
+    "dashboard.totalLinesDelta": "总代码行数 (增量)",
+    "dashboard.aiLinesDelta": "AI 代码行数 (增量)"
+}
