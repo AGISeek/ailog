@@ -26,14 +26,22 @@
         .metric {
             text-align: center;
         }
-        input, button {
+        input, button, select {
             border: 1px solid var(--vscode-input-border);
             background-color: var(--vscode-input-background);
             color: var(--vscode-input-foreground);
             padding: 5px;
+            margin: 0 5px;
         }
         button:hover {
             background-color: var(--vscode-button-hover-background);
+        }
+        select {
+            min-width: 150px;
+        }
+        select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -41,11 +49,13 @@
     <h1>{{dashboard.title}}</h1>
     <div class="filters">
         <label for="repo-filter">{{dashboard.repoFilter}}</label>
-        <input type="text" id="repo-filter" placeholder="e.g., my-project"/>
+        <select id="repo-filter">
+            <option value="">{{dashboard.allRepos}}</option>
+        </select>
         <label for="branch-filter">{{dashboard.branchFilter}}</label>
-        <input type="text" id="branch-filter" placeholder="e.g., main"/>
-        <button id="filter-button">{{dashboard.filterButton}}</button>
-        <button id="clear-filter-button">{{dashboard.clearButton}}</button>
+        <select id="branch-filter" disabled>
+            <option value="">{{dashboard.allBranches}}</option>
+        </select>
     </div>
     <div class="metrics">
         <div class="metric">
@@ -62,24 +72,40 @@
     </div>
     <script>
         const vscode = acquireVsCodeApi();
-        const filterButton = document.getElementById('filter-button');
-        const clearFilterButton = document.getElementById('clear-filter-button');
         const repoFilter = document.getElementById('repo-filter');
         const branchFilter = document.getElementById('branch-filter');
 
-        filterButton.addEventListener('click', () => {
+        // 当仓库下拉框变化时，更新分支下拉框并重新加载数据
+        repoFilter.addEventListener('change', () => {
+            // 清空分支下拉框
+            branchFilter.innerHTML = '<option value="">{{dashboard.allBranches}}</option>';
+            
+            // 如果选择了仓库，启用分支筛选器并获取分支数据
+            if (repoFilter.value) {
+                branchFilter.disabled = false;
+                vscode.postMessage({
+                    command: 'getBranches',
+                    repo: repoFilter.value
+                });
+            } else {
+                // 如果没有选择仓库，禁用分支筛选器
+                branchFilter.disabled = true;
+            }
+            
+            // 重新加载提交数据
             vscode.postMessage({
                 command: 'getCommits',
-                repo: repoFilter.value,
-                branch: branchFilter.value
+                repo: repoFilter.value || undefined,
+                branch: branchFilter.value || undefined
             });
         });
 
-        clearFilterButton.addEventListener('click', () => {
-            repoFilter.value = '';
-            branchFilter.value = '';
+        // 当分支下拉框变化时，重新加载数据
+        branchFilter.addEventListener('change', () => {
             vscode.postMessage({
-                command: 'getCommits'
+                command: 'getCommits',
+                repo: repoFilter.value || undefined,
+                branch: branchFilter.value || undefined
             });
         });
 
@@ -115,6 +141,34 @@
         window.addEventListener('message', event => {
             const message = event.data;
             switch (message.command) {
+                case 'loadRepos':
+                    const repos = message.repos;
+                    const currentRepo = repoFilter.value;
+                    repoFilter.innerHTML = '<option value="">{{dashboard.allRepos}}</option>';
+                    repos.forEach(repo => {
+                        const option = document.createElement('option');
+                        option.value = repo;
+                        option.textContent = repo;
+                        if (repo === currentRepo) {
+                            option.selected = true;
+                        }
+                        repoFilter.appendChild(option);
+                    });
+                    break;
+                case 'loadBranches':
+                    const branches = message.branches;
+                    const currentBranch = branchFilter.value;
+                    branchFilter.innerHTML = '<option value="">{{dashboard.allBranches}}</option>';
+                    branches.forEach(branch => {
+                        const option = document.createElement('option');
+                        option.value = branch;
+                        option.textContent = branch;
+                        if (branch === currentBranch) {
+                            option.selected = true;
+                        }
+                        branchFilter.appendChild(option);
+                    });
+                    break;
                 case 'loadCommits':
                     const commits = message.commits;
                     if (!commits) return;
@@ -174,6 +228,7 @@
         });
 
         // Initial load
+        vscode.postMessage({ command: 'getRepos' });
         vscode.postMessage({ command: 'getCommits' });
     </script>
 </body>

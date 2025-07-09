@@ -38,6 +38,3 @@ The extension works by installing a `post-commit` hook in your Git repository. A
 - `AIlog: Install Git Hook for AI Attribution`: Installs the Git hook in the current project's repository.
 - `AIlog: Toggle AI Generated`: Toggles the AI-generated flag for the next commit (this is the same as clicking the status bar item).
 
----
-
-Developed with the help of Gemini.

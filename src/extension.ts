@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import simpleGit, { SimpleGit } from 'simple-git';
-import { connectToDatabase, insertCommit, getCommits, Commit } from './database';
+import { connectToDatabase, insertCommit, getCommits, getUniqueRepos, getUniqueBranches, Commit } from './database';
 import { initialize as initializeI18n, t } from './i18n';
 
 /**
@@ -171,6 +171,15 @@ function createDashboardPanel(context: vscode.ExtensionContext) {
                 const commits = await getCommits(repo, branch);
                 panel.webview.postMessage({ command: 'loadCommits', commits });
                 return;
+            case 'getRepos':
+                const repos = await getUniqueRepos();
+                panel.webview.postMessage({ command: 'loadRepos', repos });
+                return;
+            case 'getBranches':
+                const selectedRepo = message.repo || undefined;
+                const branches = await getUniqueBranches(selectedRepo);
+                panel.webview.postMessage({ command: 'loadBranches', branches });
+                return;
         }
     });
 }
@@ -191,7 +200,7 @@ function getWebviewContent(context: vscode.ExtensionContext, webview: vscode.Web
     ));
 
     // 替换 HTML 中的所有 {{key}} 占位符
-    htmlContent = htmlContent.replace(/\{\{([^}]+)\}\} /g, (match, key) => {
+    htmlContent = htmlContent.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
         const aKey = key.trim();
         if (aKey === 'chartjsUri') {
             return chartjsUri.toString();

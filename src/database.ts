@@ -150,3 +150,44 @@ export function getCommits(repo?: string, branch?: string): Promise<Commit[]> {
         });
     });
 }
+
+/**
+ * 获取数据库中所有的仓库名称。
+ * @returns {Promise<string[]>} - 返回一个包含所有仓库名称的数组。
+ */
+export function getUniqueRepos(): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT DISTINCT repo FROM commits ORDER BY repo';
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows.map((row: any) => row.repo));
+            }
+        });
+    });
+}
+
+/**
+ * 获取数据库中所有的分支名称。
+ * @param {string} [repo] - (可选) 按仓库名称筛选分支。
+ * @returns {Promise<string[]>} - 返回一个包含所有分支名称的数组。
+ */
+export function getUniqueBranches(repo?: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+        let sql = 'SELECT DISTINCT branch FROM commits';
+        const params: any[] = [];
+        if (repo) {
+            sql += ' WHERE repo = ?';
+            params.push(repo);
+        }
+        sql += ' ORDER BY branch';
+        db.all(sql, params, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows.map((row: any) => row.branch));
+            }
+        });
+    });
+}
