@@ -28,6 +28,9 @@ This is a VS Code extension that tracks AI-generated commits and provides analyt
 - `src/database.ts` - SQLite database operations for commit tracking
 - `src/i18n.ts` - Internationalization support (English/Chinese)
 - `src/dashboard.html` - Dashboard UI with Chart.js integration
+- `src/lib/aiDetector.ts` - Advanced AI detection engine with multi-dimensional scoring
+- `src/lib/gitInteraction.ts` - Git interaction manager for Human-in-the-loop workflow
+- `src/lib/commitHookScript.js` - Standalone Node.js script for Git hook fallback
 
 **Key Dependencies:**
 - `simple-git` - Git operations and commit analysis
@@ -42,10 +45,37 @@ The extension uses SQLite with a single `commits` table stored in `~/.watch-curs
 - `notes` - Commit message
 
 ### Git Hook Integration
-The extension installs a `post-commit` hook that executes `code --command ailog.processCommit` to automatically capture commit metadata after each commit.
+The extension installs both `pre-commit` and `post-commit` hooks:
+- **Pre-commit hook**: Executes `code --command ailog.interactiveCommitCheck` for Human-in-the-loop AI detection and attribution
+- **Post-commit hook**: Executes `code --command ailog.processCommit` to automatically capture commit metadata after each commit
+
+The system follows a Human-in-the-loop principle, providing interactive confirmation when AI-generated code is detected.
+
+### AI Detection System
+The extension implements a sophisticated multi-dimensional AI detection system:
+
+**Detection Methods:**
+1. **Real-time Detection**: Monitors document changes and analyzes code patterns in real-time
+2. **Commit-time Detection**: Analyzes staged changes before commit with interactive confirmation
+3. **Manual Override**: User can manually toggle AI attribution status
+
+**Multi-dimensional Analysis:**
+- **Code Chunk Size**: Analyzes the volume of code added in single operations
+- **Syntactic Completeness**: Checks for complete, well-formed code structures
+- **Boilerplate Patterns**: Identifies common AI-generated code templates
+- **Comment Quality**: Evaluates documentation and comment patterns
+- **Time Proximity**: Correlates code changes with Cursor command execution
+- **Language Patterns**: Uses language-specific heuristics for detection
+
+**Scoring System:**
+- Confidence threshold of 70% for AI detection
+- Weighted scoring across multiple dimensions
+- Detailed reporting with reasons for detection
 
 ### Commands and UI
 - Status bar toggle for marking next commit as AI-generated
+- Real-time AI detection with confidence scoring
+- Interactive commit confirmation with detailed reports
 - Dashboard webview panel with filtering by repo/branch
 - Automatic Git hook installation with user prompts
 

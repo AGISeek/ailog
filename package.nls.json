@@ -3,5 +3,8 @@
     "description": "Intelligently tracks and visualizes your coding activity, with a special focus on attributing commits generated with AI tools.",
     "command.installGitHook": "AIlog: Install Git Hook for AI Attribution",
     "command.toggleAiGenerated": "AIlog: Toggle AI Generated",
-    "command.showDashboard": "AIlog: Show Dashboard"
+    "command.enableRealtimeDetection": "AIlog: Enable Real-time AI Detection",
+    "command.showDashboard": "AIlog: Show Dashboard",
+    "command.processCommit": "AIlog: Process Commit (Internal)",
+    "command.interactiveCommitCheck": "AIlog: Interactive Commit Check"
 }

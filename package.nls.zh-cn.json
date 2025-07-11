@@ -3,5 +3,8 @@
     "description": "智能地追踪并可视化您的编码活动，专注于归因由 AI 工具生成的提交。",
     "command.installGitHook": "智迹: 安装用于 AI 归属的 Git 钩子",
     "command.toggleAiGenerated": "智迹: 切换 AI 生成状态",
-    "command.showDashboard": "智迹: 显示仪表盘"
+    "command.enableRealtimeDetection": "智迹: 启用实时 AI 检测",
+    "command.showDashboard": "智迹: 显示仪表盘",
+    "command.processCommit": "智迹: 处理提交 (内部)",
+    "command.interactiveCommitCheck": "智迹: 交互式提交检查"
 }

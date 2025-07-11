@@ -30,13 +30,58 @@
 				"title": "%command.toggleAiGenerated%"
 			},
 			{
+				"command": "ailog.enableRealtimeDetection",
+				"title": "%command.enableRealtimeDetection%"
+			},
+			{
 				"command": "ailog.showDashboard",
 				"title": "%command.showDashboard%"
 			},
 			{
-				"command": "ailog.processCommit"
+				"command": "ailog.processCommit",
+				"title": "%command.processCommit%"
+			},
+			{
+				"command": "ailog.interactiveCommitCheck",
+				"title": "%command.interactiveCommitCheck%"
+			},
+			{
+				"command": "ailog.configureAiAttribution",
+				"title": "%command.configureAiAttribution%"
 			}
-		]
+		],
+		"configuration": {
+			"title": "AIlog",
+			"properties": {
+				"ailog.aiAttribution.name": {
+					"type": "string",
+					"default": "Cursor AI",
+					"description": "%configuration.aiAttribution.name.description%"
+				},
+				"ailog.aiAttribution.email": {
+					"type": "string",
+					"default": "cursor-ai@company.com",
+					"description": "%configuration.aiAttribution.email.description%"
+				},
+				"ailog.detection.confidenceThreshold": {
+					"type": "number",
+					"default": 70,
+					"minimum": 0,
+					"maximum": 100,
+					"description": "%configuration.detection.confidenceThreshold.description%"
+				},
+				"ailog.detection.enableTimeProximity": {
+					"type": "boolean",
+					"default": true,
+					"description": "%configuration.detection.enableTimeProximity.description%"
+				},
+				"ailog.detection.enablePatternMatching": {
+					"type": "boolean",
+					"default": true,
+					"description": "%configuration.detection.enablePatternMatching.description%"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
