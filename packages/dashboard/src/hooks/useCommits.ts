@@ -24,6 +24,7 @@ export const useCommits = () => {
 
   const {
     filters,
+    tableFilters,
     repositoryOptions,
     branchOptions,
     committerOptions,
@@ -35,7 +36,9 @@ export const useCommits = () => {
   const { postMessage, onMessage } = useVSCodeApi();
 
   // 应用筛选器
-  const applyFilters = useCallback((commits: Commit[], filters: CommitFilters): Commit[] => {
+  const applyFilters = useCallback((commits: Commit[], filters: CommitFilters, tableFilters: Record<string, React.Key[] | null> = {}): Commit[] => {
+    console.log('🎯 Applying filters:', { filters, tableFilters });
+    
     return commits.filter(commit => {
       // 日期范围筛选
       if (filters.dateRange) {
@@ -73,6 +76,56 @@ export const useCommits = () => {
       if (filters.messageSearch && filters.messageSearch.trim()) {
         const searchTerm = filters.messageSearch.toLowerCase();
         if (!commit.notes.toLowerCase().includes(searchTerm)) {
+          return false;
+        }
+      }
+
+      // 表格列筛选器
+      // 仓库筛选
+      if (tableFilters.repo && tableFilters.repo.length > 0) {
+        if (!tableFilters.repo.includes(commit.repo)) {
+          return false;
+        }
+      }
+
+      // 分支筛选
+      if (tableFilters.branch && tableFilters.branch.length > 0) {
+        if (!tableFilters.branch.includes(commit.branch)) {
+          return false;
+        }
+      }
+
+      // 提交者筛选
+      if (tableFilters.committer && tableFilters.committer.length > 0) {
+        if (!tableFilters.committer.includes(commit.committer)) {
+          return false;
+        }
+      }
+
+      // AI类型筛选
+      if (tableFilters.is_ai_generated && tableFilters.is_ai_generated.length > 0) {
+        console.log('🤖 AI Type filter check:', { 
+          filterValues: tableFilters.is_ai_generated, 
+          commitValue: commit.is_ai_generated,
+          commitValueType: typeof commit.is_ai_generated
+        });
+        
+        // 将筛选器值转换为boolean进行比较
+        const selectedValues = tableFilters.is_ai_generated.map(val => {
+          const valAsAny = val as any;
+          if (valAsAny === true || valAsAny === 'true' || String(val) === 'true') return true;
+          if (valAsAny === false || valAsAny === 'false' || String(val) === 'false') return false;
+          return Boolean(val);
+        });
+        
+        console.log('🤖 Converted filter values:', selectedValues);
+        
+        // 将commit的is_ai_generated值转换为boolean进行比较
+        const commitIsAi = Boolean(commit.is_ai_generated);
+        console.log('🤖 Commit boolean value:', commitIsAi);
+        
+        if (!selectedValues.includes(commitIsAi)) {
+          console.log('🤖 Commit filtered out');
           return false;
         }
       }
@@ -170,9 +223,11 @@ export const useCommits = () => {
 
   // 当筛选条件变化时重新筛选数据
   useEffect(() => {
-    const filtered = applyFilters(commits, filters);
+    console.log('🔄 Refiltering commits:', { commitsCount: commits.length, filters, tableFilters });
+    const filtered = applyFilters(commits, filters, tableFilters);
+    console.log('✅ Filtered result:', { filteredCount: filtered.length });
     setFilteredCommits(filtered);
-  }, [commits, filters, applyFilters, setFilteredCommits]);
+  }, [commits, filters, tableFilters, applyFilters, setFilteredCommits]);
 
   // 初始化时加载数据
   useEffect(() => {

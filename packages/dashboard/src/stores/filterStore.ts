@@ -12,6 +12,8 @@ interface FilterState {
   pagination: PaginationState;
   /** 排序状态 */
   sorter: TableSorter;
+  /** 表格列筛选器 */
+  tableFilters: Record<string, React.Key[] | null>;
   /** 仓库选项 */
   repositoryOptions: FilterOption[];
   /** 分支选项 */
@@ -31,6 +33,8 @@ interface FilterActions {
   setPagination: (pagination: Partial<PaginationState>) => void;
   /** 设置排序 */
   setSorter: (sorter: TableSorter) => void;
+  /** 设置表格筛选器 */
+  setTableFilters: (filters: Record<string, React.Key[] | null>) => void;
   /** 设置仓库选项 */
   setRepositoryOptions: (options: FilterOption[]) => void;
   /** 设置分支选项 */
@@ -57,14 +61,15 @@ const initialPagination: PaginationState = {
 };
 
 const initialSorter: TableSorter = {
-  field: 'commit_time',
-  order: 'descend',
+  field: undefined,
+  order: undefined,
 };
 
 export const useFilterStore = create<FilterState & FilterActions>()((set, get) => ({
   filters: initialFilters,
   pagination: initialPagination,
   sorter: initialSorter,
+  tableFilters: {},
   repositoryOptions: [],
   branchOptions: [],
   committerOptions: [],
@@ -83,7 +88,7 @@ export const useFilterStore = create<FilterState & FilterActions>()((set, get) =
   },
 
   clearFilters: () => {
-    set({ filters: initialFilters });
+    set({ filters: initialFilters, tableFilters: {} });
     get().resetPagination();
   },
 
@@ -95,6 +100,12 @@ export const useFilterStore = create<FilterState & FilterActions>()((set, get) =
 
   setSorter: (sorter) => {
     set({ sorter });
+    get().resetPagination();
+  },
+
+  setTableFilters: (tableFilters) => {
+    console.log('🏪 Store - Setting table filters:', tableFilters);
+    set({ tableFilters });
     get().resetPagination();
   },
 

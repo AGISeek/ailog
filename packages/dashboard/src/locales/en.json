@@ -52,7 +52,8 @@
     "ai": "AI",
     "manual": "Manual",
     "commitRecords": "Commit Records",
-    "pagination": "Showing {{start}}-{{end}} of {{total}} items"
+    "pagination": "Showing {{start}}-{{end}} of {{total}} items",
+    "noData": "No data available"
   },
   "pagination": {
     "page": "Page",

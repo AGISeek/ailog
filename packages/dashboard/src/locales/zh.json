@@ -52,7 +52,8 @@
     "ai": "AI",
     "manual": "手动",
     "commitRecords": "提交记录",
-    "pagination": "显示 {{start}}-{{end}} 条，共 {{total}} 条"
+    "pagination": "显示 {{start}}-{{end}} 条，共 {{total}} 条",
+    "noData": "暂无数据"
   },
   "pagination": {
     "page": "第",

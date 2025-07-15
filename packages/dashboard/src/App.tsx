@@ -37,7 +37,9 @@ const App: React.FC = () => {
     pagination, 
     setPagination, 
     sorter, 
-    setSorter 
+    setSorter,
+    tableFilters,
+    setTableFilters
   } = useFilterStore();
 
   return (
@@ -93,6 +95,8 @@ const App: React.FC = () => {
             committerOptions={committerOptions}
             onPaginationChange={setPagination}
             onSorterChange={setSorter}
+            onTableFiltersChange={setTableFilters}
+            currentFilters={tableFilters}
           />
         </Content>
       </Layout>

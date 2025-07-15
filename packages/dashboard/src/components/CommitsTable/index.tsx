@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Card, Table, Tag, Space, Typography } from 'antd';
+import { Card, Table, Tag, Space, Typography, Empty } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type { ColumnsType, TableProps } from 'antd/es/table';
@@ -23,6 +23,8 @@ interface CommitsTableProps {
   committerOptions: FilterOption[];
   onPaginationChange: (pagination: Partial<PaginationState>) => void;
   onSorterChange: (sorter: TableSorter) => void;
+  onTableFiltersChange: (filters: Record<string, React.Key[] | null>) => void;
+  currentFilters: Record<string, React.Key[] | null>;
 }
 
 export const CommitsTable: React.FC<CommitsTableProps> = ({
@@ -35,6 +37,8 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
   committerOptions,
   onPaginationChange,
   onSorterChange,
+  onTableFiltersChange,
+  currentFilters,
 }) => {
   const { t } = useTranslation();
 
@@ -44,7 +48,7 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
       dataIndex: 'commit_time',
       key: 'commit_time',
       sorter: (a: Commit, b: Commit) => a.commit_time - b.commit_time,
-      sortOrder: sorter.field === 'commit_time' ? sorter.order : null,
+      sortOrder: sorter.field === 'commit_time' ? (sorter.order || null) : null,
       render: (time: number) => new Date(time).toLocaleString(),
       width: 180,
     },
@@ -64,6 +68,7 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
       dataIndex: 'repo',
       key: 'repo',
       filters: repositoryOptions.map(repo => ({ text: repo.label, value: repo.value })),
+      filteredValue: currentFilters.repo || null,
       width: 120,
     },
     {
@@ -71,6 +76,7 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
       dataIndex: 'branch',
       key: 'branch',
       filters: branchOptions.map(branch => ({ text: branch.label, value: branch.value })),
+      filteredValue: currentFilters.branch || null,
       width: 100,
     },
     {
@@ -78,21 +84,26 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
       dataIndex: 'committer',
       key: 'committer',
       filters: committerOptions.map(committer => ({ text: committer.label, value: committer.value })),
+      filteredValue: currentFilters.committer || null,
       width: 120,
     },
     {
       title: t('table.aiGenerated'),
       dataIndex: 'is_ai_generated',
       key: 'is_ai_generated',
-      render: (isAi: boolean) => (
-        <Tag className={isAi ? styles.aiTag : styles.manualTag}>
-          {isAi ? t('table.ai') : t('table.manual')}
-        </Tag>
-      ),
+      render: (isAi: number | boolean) => {
+        const isAiBoolean = Boolean(isAi);
+        return (
+          <Tag className={isAiBoolean ? styles.aiTag : styles.manualTag}>
+            {isAiBoolean ? t('table.ai') : t('table.manual')}
+          </Tag>
+        );
+      },
       filters: [
         { text: t('table.ai'), value: true },
         { text: t('table.manual'), value: false },
       ],
+      filteredValue: currentFilters.is_ai_generated || null,
       width: 100,
     },
     {
@@ -100,7 +111,7 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
       dataIndex: 'code_volume_delta',
       key: 'code_volume_delta',
       sorter: (a: Commit, b: Commit) => a.code_volume_delta - b.code_volume_delta,
-      sortOrder: sorter.field === 'code_volume_delta' ? sorter.order : null,
+      sortOrder: sorter.field === 'code_volume_delta' ? (sorter.order || null) : null,
       render: (delta: number) => (
         <span className={
           delta > 0 ? styles.positiveLines :
@@ -125,13 +136,54 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
     },
   ];
 
-  const handleTableChange: TableProps<Commit>['onChange'] = (_, __, sorterConfig) => {
-    // 处理排序
-    if (!Array.isArray(sorterConfig) && sorterConfig.field && sorterConfig.order) {
-      onSorterChange({
-        field: sorterConfig.field as string,
-        order: sorterConfig.order,
+  const handleTableChange: TableProps<Commit>['onChange'] = (_, filters, sorterConfig) => {
+    console.log('🔍 TableChange - filters:', filters);
+    console.log('🔍 TableChange - sorterConfig:', sorterConfig);
+    
+    // 处理排序 - 支持取消排序
+    if (!Array.isArray(sorterConfig)) {
+      if (sorterConfig.field) {
+        // 如果有字段但没有排序顺序，表示取消排序
+        if (!sorterConfig.order) {
+          console.log('🔄 Clearing sort');
+          onSorterChange({
+            field: undefined,
+            order: undefined,
+          });
+        } else {
+          // 正常排序
+          console.log('🔄 Setting sort:', sorterConfig.field, sorterConfig.order);
+          onSorterChange({
+            field: sorterConfig.field as string,
+            order: sorterConfig.order,
+          });
+        }
+      } else {
+        // 没有字段，清除排序
+        console.log('🔄 Clearing sort (no field)');
+        onSorterChange({
+          field: undefined,
+          order: undefined,
+        });
+      }
+    }
+
+    // 处理筛选器
+    if (filters) {
+      console.log('🔍 Processing table filters:', filters);
+      // 转换FilterValue到React.Key[]类型
+      const convertedFilters: Record<string, React.Key[] | null> = {};
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value === null || value === undefined) {
+          convertedFilters[key] = null;
+        } else if (Array.isArray(value)) {
+          convertedFilters[key] = value as React.Key[];
+        } else {
+          convertedFilters[key] = [value] as React.Key[];
+        }
       });
+      console.log('🔍 Converted filters:', convertedFilters);
+      onTableFiltersChange(convertedFilters);
     }
   };
 
@@ -171,6 +223,9 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
         onChange={handleTableChange}
         scroll={{ x: 'max-content' }}
         size="small"
+        locale={{
+          emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('table.noData')} />
+        }}
       />
     </Card>
   );
