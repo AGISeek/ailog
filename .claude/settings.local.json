@@ -30,7 +30,8 @@
       "Bash(pnpm update:*)",
       "Bash(pnpm dashboard:build:*)",
       "Bash(git add:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
