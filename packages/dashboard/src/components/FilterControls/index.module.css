@@ -1,0 +1,131 @@
+/**
+ * 筛选控制组件样式
+ */
+
+.container {
+  margin-bottom: 24px;
+  background: var(--vscode-editor-widget-background);
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filterSpace {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.rangePicker {
+  width: 240px;
+}
+
+.select {
+  min-width: 120px;
+}
+
+.repositorySelect {
+  width: 150px;
+}
+
+.branchSelect {
+  width: 120px;
+}
+
+.committerSelect {
+  width: 150px;
+}
+
+.typeSelect {
+  width: 120px;
+}
+
+.searchInput {
+  width: 200px;
+}
+
+.actionButton {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clearButton {
+  color: var(--vscode-button-secondaryForeground);
+  background: var(--vscode-button-secondaryBackground);
+  border-color: var(--vscode-button-secondaryBackground);
+}
+
+.clearButton:hover {
+  background: var(--vscode-button-secondaryHoverBackground);
+  border-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.refreshButton {
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-button-background);
+  border-color: var(--vscode-button-background);
+}
+
+.refreshButton:hover {
+  background: var(--vscode-button-hoverBackground);
+  border-color: var(--vscode-button-hoverBackground);
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .rangePicker {
+    width: 200px;
+  }
+  
+  .repositorySelect,
+  .committerSelect {
+    width: 130px;
+  }
+  
+  .searchInput {
+    width: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filterSpace {
+    gap: 8px;
+  }
+  
+  .rangePicker {
+    width: 180px;
+  }
+  
+  .repositorySelect,
+  .committerSelect {
+    width: 120px;
+  }
+  
+  .branchSelect,
+  .typeSelect {
+    width: 100px;
+  }
+  
+  .searchInput {
+    width: 140px;
+  }
+}
+
+@media (max-width: 576px) {
+  .filterSpace {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .rangePicker,
+  .repositorySelect,
+  .branchSelect,
+  .committerSelect,
+  .typeSelect,
+  .searchInput {
+    width: 100%;
+  }
+}

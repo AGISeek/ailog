@@ -1,0 +1,54 @@
+/**
+ * 主应用组件样式
+ */
+
+.layout {
+  min-height: 100vh;
+  background: var(--vscode-editor-background);
+  color: var(--vscode-foreground);
+}
+
+.header {
+  background: var(--vscode-titleBar-activeBackground);
+  border-bottom: 1px solid var(--vscode-panel-border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: var(--vscode-titleBar-activeForeground) !important;
+  margin: 0 !important;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.content {
+  padding: 24px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.errorCard {
+  margin-bottom: 24px;
+  background: var(--vscode-inputValidation-errorBackground);
+  border: 1px solid var(--vscode-inputValidation-errorBorder);
+  border-radius: 6px;
+}
+
+.errorText {
+  color: var(--vscode-inputValidation-errorForeground) !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
+  }
+  
+  .header {
+    padding: 0 16px;
+  }
+}

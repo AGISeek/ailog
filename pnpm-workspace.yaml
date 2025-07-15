@@ -1,0 +1,7 @@
+packages:
+  - 'packages/*'
+  - 'shared'
+
+# 可选配置
+prefer-workspace-packages: true
+enable-auto-install-peers: true

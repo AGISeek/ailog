@@ -1,0 +1,494 @@
+/**
+ * 全局样式和主题适配
+ */
+
+/* VS Code 主题变量覆盖 */
+:root {
+  /* 确保变量在所有环境下都可用 */
+  --vscode-editor-background: #1e1e1e;
+  --vscode-editor-foreground: #cccccc;
+  --vscode-titleBar-activeBackground: #2d2d30;
+  --vscode-titleBar-activeForeground: #cccccc;
+  --vscode-panel-border: #2d2d30;
+  --vscode-editor-widget-background: #252526;
+  --vscode-widget-border: #454545;
+  --vscode-foreground: #cccccc;
+  --vscode-descriptionForeground: #9d9d9d;
+  --vscode-charts-blue: #007acc;
+  --vscode-button-background: #0e639c;
+  --vscode-button-foreground: #ffffff;
+  --vscode-button-hoverBackground: #1177bb;
+  --vscode-button-secondaryBackground: #3c3c3c;
+  --vscode-button-secondaryForeground: #cccccc;
+  --vscode-button-secondaryHoverBackground: #45494a;
+  --vscode-inputValidation-errorBackground: #5a1d1d;
+  --vscode-inputValidation-errorBorder: #be1100;
+  --vscode-inputValidation-errorForeground: #f48771;
+  --vscode-list-hoverBackground: #2a2d2e;
+  --vscode-icon-foreground: #c5c5c5;
+  --vscode-gitDecoration-addedResourceForeground: #81b88b;
+  --vscode-gitDecoration-deletedResourceForeground: #c74e39;
+  --vscode-textCodeBlock-background: #0f0f0f;
+  --vscode-textPreformat-foreground: #d7ba7d;
+  --vscode-textBlockQuote-border: #007acc;
+}
+
+/* 全局重置和基础样式 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: var(--vscode-editor-background);
+  color: var(--vscode-foreground);
+  line-height: 1.6;
+}
+
+/* Ant Design 组件主题覆盖 */
+.ant-layout {
+  background: var(--vscode-editor-background) !important;
+}
+
+/* 下拉选择器箭头图标样式修复 */
+.ant-select-arrow,
+.ant-select-clear,
+.ant-picker-suffix,
+.ant-picker-clear {
+  color: var(--vscode-icon-foreground) !important;
+}
+
+.ant-select-arrow:hover,
+.ant-select-clear:hover,
+.ant-picker-suffix:hover,
+.ant-picker-clear:hover {
+  color: var(--vscode-foreground) !important;
+}
+
+/* 所有图标颜色统一 */
+.anticon {
+  color: var(--vscode-icon-foreground) !important;
+}
+
+.anticon:hover {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-card {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-card-head {
+  background: var(--vscode-editor-widget-background) !important;
+  border-bottom-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-card-head-title {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-statistic-title {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+.ant-statistic-content {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-select {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-select-selector {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-select-selection-placeholder {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+/* 选择器下拉菜单 */
+.ant-select-dropdown {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+.ant-select-item {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-select-item:hover {
+  background: var(--vscode-list-hoverBackground) !important;
+}
+
+.ant-select-item-option-selected {
+  background: var(--vscode-list-activeSelectionBackground) !important;
+  color: var(--vscode-list-activeSelectionForeground) !important;
+}
+
+.ant-select-item-option-active {
+  background: var(--vscode-list-hoverBackground) !important;
+}
+
+.ant-input {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-input::placeholder {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+.ant-input-prefix {
+  color: var(--vscode-icon-foreground) !important;
+}
+
+.ant-input-suffix {
+  color: var(--vscode-icon-foreground) !important;
+}
+
+.ant-input:focus,
+.ant-input-focused {
+  border-color: var(--vscode-charts-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2) !important;
+}
+
+.ant-picker:focus,
+.ant-picker-focused {
+  border-color: var(--vscode-charts-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2) !important;
+}
+
+.ant-select:focus .ant-select-selector,
+.ant-select-focused .ant-select-selector {
+  border-color: var(--vscode-charts-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2) !important;
+}
+
+/* 搜索输入框特殊处理 */
+.ant-input-affix-wrapper {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+}
+
+.ant-input-affix-wrapper > input.ant-input {
+  background: transparent !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused {
+  border-color: var(--vscode-charts-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2) !important;
+}
+
+.ant-input-prefix {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+/* 日期选择器样式 */
+.ant-picker {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker:hover,
+.ant-picker-focused {
+  border-color: var(--vscode-charts-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2) !important;
+}
+
+.ant-picker-input > input {
+  background: transparent !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-input > input::placeholder {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+.ant-picker-dropdown {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+}
+
+.ant-picker-panel {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+}
+
+.ant-picker-header {
+  border-bottom-color: var(--vscode-widget-border) !important;
+}
+
+.ant-picker-header button {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-header button:hover {
+  color: var(--vscode-charts-blue) !important;
+}
+
+.ant-picker-content {
+  background: var(--vscode-editor-widget-background) !important;
+}
+
+.ant-picker-cell {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-cell:hover .ant-picker-cell-inner {
+  background: var(--vscode-list-hoverBackground) !important;
+}
+
+.ant-picker-cell-selected .ant-picker-cell-inner {
+  background: var(--vscode-charts-blue) !important;
+  color: white !important;
+}
+
+.ant-picker-cell-today .ant-picker-cell-inner {
+  border-color: var(--vscode-charts-blue) !important;
+}
+
+/* 日期选择器样式修复 */
+.ant-picker {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-input > input {
+  background: transparent !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-input > input::placeholder {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+.ant-picker-separator {
+  color: var(--vscode-descriptionForeground) !important;
+}
+
+.ant-picker-suffix {
+  color: var(--vscode-icon-foreground) !important;
+}
+
+.ant-picker-clear {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-icon-foreground) !important;
+}
+
+/* 日期选择器下拉面板 */
+.ant-picker-dropdown {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+.ant-picker-panel {
+  background: var(--vscode-editor-widget-background) !important;
+  border-color: var(--vscode-widget-border) !important;
+}
+
+.ant-picker-header {
+  border-bottom-color: var(--vscode-widget-border) !important;
+}
+
+.ant-picker-header button {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-content {
+  background: var(--vscode-editor-widget-background) !important;
+}
+
+.ant-picker-cell {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-picker-cell:hover .ant-picker-cell-inner {
+  background: var(--vscode-list-hoverBackground) !important;
+}
+
+.ant-picker-cell-selected .ant-picker-cell-inner {
+  background: var(--vscode-button-background) !important;
+  color: var(--vscode-button-foreground) !important;
+}
+
+.ant-picker-cell-today .ant-picker-cell-inner {
+  border-color: var(--vscode-charts-blue) !important;
+}
+
+.ant-btn {
+  border-radius: 4px !important;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.ant-btn-primary {
+  background: var(--vscode-button-background) !important;
+  border-color: var(--vscode-button-background) !important;
+  color: var(--vscode-button-foreground) !important;
+}
+
+.ant-btn-primary:hover {
+  background: var(--vscode-button-hoverBackground) !important;
+  border-color: var(--vscode-button-hoverBackground) !important;
+}
+
+.ant-btn-default {
+  background: var(--vscode-button-secondaryBackground) !important;
+  border-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-button-secondaryForeground) !important;
+}
+
+.ant-btn-default:hover {
+  background: var(--vscode-button-secondaryHoverBackground) !important;
+  border-color: var(--vscode-widget-border) !important;
+}
+
+.ant-table {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-table-thead > tr > th {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-foreground) !important;
+  border-bottom-color: var(--vscode-widget-border) !important;
+  font-weight: 600;
+}
+
+.ant-table-tbody > tr > td {
+  border-bottom-color: var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: var(--vscode-list-hoverBackground) !important;
+}
+
+.ant-table-tbody > tr > td {
+  background: var(--vscode-editor-widget-background) !important;
+}
+
+.ant-table-tbody > tr:nth-child(even) > td {
+  background: var(--vscode-editor-widget-background) !important;
+}
+
+/* 表格单元格内容强制使用暗色背景 */
+.ant-table-tbody > tr > td {
+  background: var(--vscode-editor-widget-background) !important;
+}
+
+/* 强制所有表格内容使用暗色背景 */
+.ant-table-tbody > tr > td,
+.ant-table-tbody > tr > td > *,
+.ant-table-tbody > tr > td .ant-typography,
+.ant-table-tbody > tr > td span {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-table-tbody > tr > td * {
+  background: transparent !important;
+  color: var(--vscode-foreground) !important;
+}
+
+/* 表格中的时间单元格特殊处理 */
+.ant-table-tbody > tr > td:first-child {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-pagination {
+  color: var(--vscode-foreground) !important;
+}
+
+.ant-pagination-item {
+  background: var(--vscode-button-secondaryBackground) !important;
+  border-color: var(--vscode-widget-border) !important;
+}
+
+.ant-pagination-item a {
+  color: var(--vscode-button-secondaryForeground) !important;
+}
+
+.ant-pagination-item.ant-pagination-item-active {
+  background: var(--vscode-button-background) !important;
+  border-color: var(--vscode-button-background) !important;
+}
+
+.ant-pagination-item.ant-pagination-item-active a {
+  color: var(--vscode-button-foreground) !important;
+}
+
+.ant-tag {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.ant-typography {
+  color: var(--vscode-foreground) !important;
+}
+
+/* 加载状态优化 */
+.ant-spin-blur {
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vscode-editor-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vscode-widget-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vscode-descriptionForeground);
+}
+
+/* 响应式字体大小 */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 13px;
+  }
+}
+
+/* 动画优化 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

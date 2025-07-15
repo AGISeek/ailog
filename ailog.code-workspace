@@ -1,0 +1,50 @@
+{
+  "folders": [
+    {
+      "name": "ailog-workspace",
+      "path": "."
+    },
+    {
+      "name": "extension",
+      "path": "./packages/extension"
+    },
+    {
+      "name": "dashboard", 
+      "path": "./packages/dashboard"
+    },
+    {
+      "name": "shared",
+      "path": "./shared"
+    }
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.suggest.autoImports": true,
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "eslint.workingDirectories": [
+      "packages/extension",
+      "packages/dashboard", 
+      "shared"
+    ],
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/out": false,
+      "**/dist": false
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/out": true,
+      "**/dist": true,
+      "**/.git": true,
+      "**/*.vsix": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}

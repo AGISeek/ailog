@@ -1,0 +1,76 @@
+{
+  "dashboard": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "noData": "暂无数据",
+    "refresh": "刷新"
+  },
+  "statistics": {
+    "totalCommits": "总提交数",
+    "aiCommits": "AI 提交数",
+    "totalLines": "总代码行数",
+    "aiLines": "AI 代码行数",
+    "aiCommitRatio": "AI 提交比例",
+    "aiLinesRatio": "AI 代码行比例"
+  },
+  "filters": {
+    "dateRange": "日期范围",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "repository": "代码仓库",
+    "branch": "分支",
+    "committer": "提交者",
+    "aiType": "类型",
+    "messageSearch": "搜索提交信息",
+    "clearFilters": "清除筛选",
+    "allRepositories": "所有仓库",
+    "allBranches": "所有分支",
+    "allCommitters": "所有提交者",
+    "allTypes": "全部",
+    "aiOnly": "仅 AI 生成",
+    "manualOnly": "仅手动提交",
+    "selectRepository": "选择仓库",
+    "selectBranch": "选择分支", 
+    "selectCommitter": "选择提交者",
+    "searchMessage": "搜索消息...",
+    "all": "全部"
+  },
+  "actions": {
+    "refresh": "刷新"
+  },
+  "table": {
+    "commitHash": "哈希",
+    "commitTime": "提交时间",
+    "repository": "仓库",
+    "branch": "分支",
+    "committer": "提交者",
+    "aiGenerated": "类型",
+    "codeLines": "行数",
+    "message": "消息",
+    "actions": "操作",
+    "viewDetails": "查看详情",
+    "ai": "AI",
+    "manual": "手动",
+    "commitRecords": "提交记录",
+    "pagination": "显示 {{start}}-{{end}} 条，共 {{total}} 条"
+  },
+  "pagination": {
+    "page": "第",
+    "of": "页，共",
+    "total": "页 总计",
+    "itemsPerPage": "条/页",
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "charts": {
+    "commitTrend": "提交趋势",
+    "commitDistribution": "提交分布",
+    "codeLinesTrend": "代码行数趋势",
+    "aiVsManual": "AI vs 手动提交",
+    "noDataMessage": "暂无数据显示",
+    "totalLinesLabel": "总代码行数",
+    "aiLinesLabel": "AI 代码行数", 
+    "commitCountLabel": "提交数量",
+    "aiCommitCountLabel": "AI 提交数量"
+  }
+}

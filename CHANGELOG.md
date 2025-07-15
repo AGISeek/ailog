@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-01-14
+
+### 🏗️ **Architecture Overhaul**
+
+#### Added
+- **Monorepo Architecture**: Migrated to pnpm workspaces with separate packages for extension, dashboard, and shared types
+- **Modern React Dashboard**: Complete rewrite using React 19, Ant Design 5.26, and Vite
+- **TypeScript Improvements**: Full type safety across all packages with shared type definitions
+- **Dark Theme Integration**: Proper VS Code theme integration with official Ant Design dark algorithm
+- **Responsive Design**: Full-width layout that adapts to screen size
+
+#### Dashboard Enhancements
+- **Streamlined Filtering**: Simplified to date range and message search for better UX
+- **Pagination Fixes**: Resolved pagination issues where page switching didn't work correctly
+- **Icon Color Fixes**: Fixed filter dropdown icons not showing proper colors in dark mode
+- **Internationalization**: Complete i18n support with proper template interpolation
+- **Compact Mode**: Enabled global compact mode for better space utilization
+
+#### Technical Improvements
+- **Ant Design Upgrade**: Updated from 5.21.7 to 5.26.4 with latest features and fixes
+- **Build Optimization**: Parallel builds and optimized development workflow
+- **Dependency Management**: Efficient pnpm workspace setup reducing installation time
+- **Code Quality**: Enhanced ESLint configuration across all packages
+
+#### Fixed
+- **Template Interpolation**: Fixed pagination display showing `{start}-{end}` instead of actual values
+- **Frontend Pagination**: Corrected pagination logic to work properly with client-side data
+- **Theme Consistency**: All icons and UI elements now properly adapt to VS Code themes
+- **Type Safety**: Resolved TypeScript compilation issues across packages
+
+### 🛠️ **Development Experience**
+
+#### Added
+- **Hot Reload Development**: Dashboard development with instant updates
+- **Package Scripts**: Convenient scripts for building, testing, and packaging
+- **Workspace Commands**: Unified commands for managing the entire monorepo
+- **Documentation Updates**: Comprehensive documentation reflecting new architecture
+
+#### Developer Commands
+```bash
+pnpm build                # Build all packages
+pnpm dashboard:dev        # Dashboard development with hot reload
+pnpm extension:package    # Package extension for distribution
+pnpm lint                 # Lint all packages
+pnpm clean                # Clean all build artifacts
+```
+
 ## [1.0.0] - 2025-07-07
 
 ### Added

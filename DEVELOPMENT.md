@@ -13,39 +13,63 @@ AIlog is a sophisticated VS Code extension that tracks AI-generated commits and 
 
 ## Development Setup
 
-### 1. Clone and Install Dependencies
+### 1. Prerequisites
+- **Node.js** v18+ 
+- **pnpm** v9.0+ (install with: `npm install -g pnpm`)
+- **VS Code** v1.85.0+
+- **Git repository** for testing
+
+### 2. Clone and Install Dependencies
 
 ```bash
 git clone https://github.com/your-org/ailog.git
 cd ailog
-npm install
+pnpm install
 ```
 
-### 2. Development Commands
+### 3. Development Commands
 
-#### Build and Compilation
+#### Workspace-level Commands
 ```bash
-npm run compile           # Compile TypeScript to JavaScript
-npm run watch             # Watch for changes and auto-compile
-npm run vscode:prepublish # Prepare for publishing (includes compile)
+pnpm build                # Build all packages
+pnpm dev                  # Start development mode for all packages
+pnpm lint                 # Run ESLint across all packages
+pnpm clean                # Clean all build artifacts
 ```
 
-#### Code Quality
+#### Package-specific Commands
 ```bash
-npm run lint              # Run ESLint on src/ directory with TypeScript support
+# Extension development
+pnpm extension:build      # Build extension package
+pnpm extension:package    # Create VSIX package
+
+# Dashboard development  
+pnpm dashboard:build      # Build React dashboard
+pnpm dashboard:dev        # Start dashboard dev server with hot reload
+
+# Publishing preparation
+pnpm vscode:prepublish    # Build everything for publishing
 ```
 
-#### Packaging
-```bash
-npm run package           # Create VSIX package using vsce for distribution
-```
+### 4. Development Workflow
 
-### 3. Development Workflow
-
-1. **Start Development**: Run `npm run watch` to enable auto-compilation
+#### For Extension Development
+1. **Build Extension**: Run `pnpm extension:build`
 2. **Launch Extension**: Press `F5` to open Extension Development Host
 3. **Test Features**: Use the extension in the development environment
 4. **Debug**: Use VS Code's built-in debugger with breakpoints
+
+#### For Dashboard Development
+1. **Start Dev Server**: Run `pnpm dashboard:dev`
+2. **Hot Reload**: Changes are automatically reflected in the browser
+3. **Build for Extension**: Run `pnpm dashboard:build` to output to extension
+4. **Test Integration**: Package extension and test dashboard within VS Code
+
+#### Full Integration Testing
+1. **Build All**: Run `pnpm build`
+2. **Package Extension**: Run `pnpm extension:package`
+3. **Install VSIX**: Install the generated .vsix file in VS Code
+4. **Test Complete Workflow**: Test all features end-to-end
 
 ## Architecture Overview
 

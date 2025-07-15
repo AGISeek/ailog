@@ -1,0 +1,76 @@
+{
+  "dashboard": {
+    "loading": "Loading...",
+    "error": "Error occurred",
+    "noData": "No data available",
+    "refresh": "Refresh"
+  },
+  "statistics": {
+    "totalCommits": "Total Commits",
+    "aiCommits": "AI Commits",
+    "totalLines": "Total Lines",
+    "aiLines": "AI Lines",
+    "aiCommitRatio": "AI Commit Ratio",
+    "aiLinesRatio": "AI Lines Ratio"
+  },
+  "filters": {
+    "dateRange": "Date Range",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "repository": "Repository", 
+    "branch": "Branch",
+    "committer": "Committer",
+    "aiType": "Type",
+    "messageSearch": "Search Message",
+    "clearFilters": "Clear Filters",
+    "allRepositories": "All Repositories",
+    "allBranches": "All Branches", 
+    "allCommitters": "All Committers",
+    "allTypes": "All",
+    "aiOnly": "AI Only",
+    "manualOnly": "Manual Only",
+    "selectRepository": "Select Repository",
+    "selectBranch": "Select Branch",
+    "selectCommitter": "Select Committer",
+    "searchMessage": "Search message...",
+    "all": "All"
+  },
+  "actions": {
+    "refresh": "Refresh"
+  },
+  "table": {
+    "commitHash": "Hash",
+    "commitTime": "Commit Time",
+    "repository": "Repository",
+    "branch": "Branch",
+    "committer": "Committer",
+    "aiGenerated": "Type",
+    "codeLines": "Lines",
+    "message": "Message",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "ai": "AI",
+    "manual": "Manual",
+    "commitRecords": "Commit Records",
+    "pagination": "Showing {{start}}-{{end}} of {{total}} items"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "of",
+    "total": "Total",
+    "itemsPerPage": "items per page",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "charts": {
+    "commitTrend": "Commit Trend",
+    "commitDistribution": "Commit Distribution",
+    "codeLinesTrend": "Code Lines Trend",
+    "aiVsManual": "AI vs Manual Commits",
+    "noDataMessage": "No data to display",
+    "totalLinesLabel": "Total Lines",
+    "aiLinesLabel": "AI Lines",
+    "commitCountLabel": "Commit Count",
+    "aiCommitCountLabel": "AI Commit Count"
+  }
+}

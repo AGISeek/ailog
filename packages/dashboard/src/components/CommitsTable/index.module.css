@@ -1,0 +1,157 @@
+/**
+ * 提交记录表格组件样式
+ */
+
+.container {
+  background: var(--vscode-editor-widget-background);
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--vscode-foreground);
+  font-weight: 600;
+}
+
+.titleIcon {
+  color: var(--vscode-charts-blue);
+}
+
+.table {
+  background: var(--vscode-editor-widget-background);
+}
+
+.hashCell {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  background: var(--vscode-textCodeBlock-background);
+  color: var(--vscode-textPreformat-foreground);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--vscode-textBlockQuote-border);
+}
+
+.aiTag {
+  background: var(--vscode-charts-blue);
+  color: white;
+  border: none;
+}
+
+.manualTag {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-button-secondaryBackground);
+}
+
+.positiveLines {
+  color: var(--vscode-gitDecoration-addedResourceForeground);
+  font-weight: 500;
+}
+
+.negativeLines {
+  color: var(--vscode-gitDecoration-deletedResourceForeground);
+  font-weight: 500;
+}
+
+.neutralLines {
+  color: var(--vscode-foreground);
+}
+
+.messageCell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pagination {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.loadingOverlay {
+  background: rgba(var(--vscode-editor-background), 0.8);
+}
+
+/* 表格行样式 */
+.table :global(.ant-table-tbody > tr:hover > td) {
+  background: var(--vscode-list-hoverBackground) !important;
+}
+
+.table :global(.ant-table-thead > tr > th) {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-foreground) !important;
+  border-bottom: 1px solid var(--vscode-widget-border) !important;
+  font-weight: 600;
+}
+
+.table :global(.ant-table-tbody > tr > td) {
+  background: var(--vscode-editor-widget-background) !important;
+  border-bottom: 1px solid var(--vscode-widget-border) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+/* 强制所有表格内容使用暗色主题 */
+.table :global(.ant-table-tbody > tr > td *) {
+  background: transparent !important;
+  color: inherit !important;
+}
+
+/* 时间列特殊处理 */
+.table :global(.ant-table-tbody > tr > td:first-child) {
+  background: var(--vscode-editor-widget-background) !important;
+  color: var(--vscode-foreground) !important;
+}
+
+.table :global(.ant-table-column-sorter) {
+  color: var(--vscode-icon-foreground);
+}
+
+.table :global(.ant-table-column-sorter-up.active),
+.table :global(.ant-table-column-sorter-down.active) {
+  color: var(--vscode-charts-blue);
+}
+
+/* 分页器样式 */
+.table :global(.ant-pagination) {
+  color: var(--vscode-foreground);
+}
+
+.table :global(.ant-pagination-item) {
+  background: var(--vscode-button-secondaryBackground);
+  border-color: var(--vscode-widget-border);
+}
+
+.table :global(.ant-pagination-item a) {
+  color: var(--vscode-button-secondaryForeground);
+}
+
+.table :global(.ant-pagination-item.ant-pagination-item-active) {
+  background: var(--vscode-button-background);
+  border-color: var(--vscode-button-background);
+}
+
+.table :global(.ant-pagination-item.ant-pagination-item-active a) {
+  color: var(--vscode-button-foreground);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .messageCell {
+    max-width: 150px;
+  }
+  
+  .table :global(.ant-table-scroll) {
+    scrollbar-width: thin;
+  }
+}
+
+@media (max-width: 576px) {
+  .messageCell {
+    max-width: 100px;
+  }
+}

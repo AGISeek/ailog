@@ -1,0 +1,73 @@
+/**
+ * 统计卡片组件样式
+ */
+
+.container {
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--vscode-editor-widget-background);
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.statistic {
+  /* 统计组件基础样式 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.statistic :global(.ant-statistic-title) {
+  color: var(--vscode-descriptionForeground) !important;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.statistic :global(.ant-statistic-content) {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+.totalStatistic :global(.ant-statistic-content) {
+  color: var(--vscode-foreground) !important;
+}
+
+.aiStatistic :global(.ant-statistic-content) {
+  color: var(--vscode-charts-blue) !important;
+}
+
+.loadingCard {
+  background: var(--vscode-editor-widget-background);
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: 8px;
+  min-height: 120px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    margin-bottom: 16px;
+  }
+  
+  .statistic :global(.ant-statistic-content) {
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .statistic :global(.ant-statistic-content) {
+    font-size: 18px !important;
+  }
+}

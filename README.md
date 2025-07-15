@@ -1,8 +1,8 @@
 # AIlog
 
-**AIlog** is a VS Code extension designed to help you intelligently track and visualize your coding activity, with a special focus on attributing commits generated with the help of AI tools. It features a modern, SOLID architecture with advanced AI detection capabilities and provides a comprehensive dashboard to analyze your productivity and the impact of AI on your work.
+**AIlog** is a modern VS Code extension designed to intelligently track and visualize your AI-assisted coding activity. Built with a monorepo architecture using pnpm workspaces, it features advanced AI detection capabilities and provides a comprehensive React-based dashboard to analyze your productivity and the impact of AI tools on your development workflow.
 
-![Dashboard Screenshot](https://user-images.githubusercontent.com/12345/placeholder.png) <!-- TODO: Add a real screenshot -->
+![Dashboard Screenshot](screenshot-20250713-232009.png)
 
 ## Features
 
@@ -12,17 +12,20 @@
 - **Time Proximity Detection**: Correlates code changes with AI command execution timing
 - **Manual Override**: Simple status bar toggle for manual AI attribution when needed
 
-### 📊 **Comprehensive Dashboard**
+### 📊 **Modern React Dashboard**
 - **Rich Analytics**: Detailed metrics on AI-generated commits and code volume
-- **Interactive Charts**: Visual trends showing your productivity over time
-- **Advanced Filtering**: Filter by repository, branch, or time period
-- **Real-time Updates**: Live data synchronization with your commit history
+- **Interactive Charts**: Built with Ant Design and Chart.js for beautiful visualizations
+- **Smart Filtering**: Date range and message search with real-time filtering
+- **Dark Theme**: Automatic VS Code theme integration with proper icon colors
+- **Responsive Design**: Full-width layout that adapts to your screen
+- **Internationalization**: Complete support for English and Chinese (中文)
 
-### 🏗️ **Modern Architecture**
+### 🏗️ **Monorepo Architecture**
+- **pnpm Workspaces**: Modern monorepo setup with efficient dependency management
 - **SOLID Principles**: Clean, maintainable code following industry best practices
-- **Service-Oriented Design**: Modular services for detection, git operations, and UI management
-- **Dependency Injection**: Loose coupling between components for better testability
-- **Comprehensive Documentation**: Full JSDoc documentation for all classes and methods
+- **TypeScript**: Full type safety across all packages with shared type definitions
+- **Modular Design**: Separate packages for extension, dashboard, and shared types
+- **Build Optimization**: Parallel builds and optimized development workflow
 
 ### 🌍 **Enhanced User Experience**
 - **Internationalization**: Full support for English and Chinese (中文)
@@ -47,10 +50,27 @@ AIlog uses a sophisticated multi-layered approach to detect and track AI-generat
 
 ## Installation
 
-1. Install the extension from the VS Code Marketplace
+### From VS Code Marketplace
+1. Install the **AIlog** extension from the VS Code Marketplace
 2. Open a Git repository in VS Code
 3. The extension will prompt you to install Git hooks - click **"Install Hook"**
 4. Start coding and let AIlog track your AI-assisted development!
+
+### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/your-org/ailog.git
+cd ailog
+
+# Install dependencies (requires pnpm)
+pnpm install
+
+# Build all packages
+pnpm build
+
+# Package the extension
+pnpm extension:package
+```
 
 ## Usage
 
@@ -68,21 +88,31 @@ AIlog uses a sophisticated multi-layered approach to detect and track AI-generat
 
 ## Architecture Overview
 
-AIlog follows SOLID principles with a clean, modular architecture:
+AIlog is built as a modern monorepo with clear separation of concerns:
 
 ```
-src/
-├── commands/           # Command handlers
-├── managers/           # Core coordination logic
-├── services/           # Business logic services
-│   ├── detection/      # AI detection algorithms
-│   ├── git/           # Git operations
-│   └── ui/            # User interface services
-├── types/             # TypeScript type definitions
-├── lib/               # Utility libraries
-├── database.ts        # SQLite database operations
-├── i18n.ts           # Internationalization
-└── extension.ts       # Main extension entry point
+ai-log/
+├── pnpm-workspace.yaml           # Workspace configuration
+├── package.json                  # Root workspace config
+├── packages/
+│   ├── extension/                # VS Code Extension (@ailog/extension)
+│   │   ├── src/
+│   │   │   ├── database.ts       # SQLite operations
+│   │   │   ├── extension.ts      # Main entry point
+│   │   │   └── dashboard-dist/   # Built React dashboard
+│   │   └── package.json
+│   ├── dashboard/                # React Dashboard (@ailog/dashboard)
+│   │   ├── src/
+│   │   │   ├── App.tsx           # Main React app
+│   │   │   ├── components/       # React components
+│   │   │   ├── hooks/            # Custom React hooks
+│   │   │   ├── stores/           # Zustand state management
+│   │   │   └── styles/           # Global styles & themes
+│   │   └── package.json
+│   └── shared/                   # Shared Types (@ailog/shared)
+│       ├── src/types/            # TypeScript definitions
+│       └── package.json
+└── shared/                       # Additional shared resources
 ```
 
 ### Key Components
@@ -124,11 +154,32 @@ AIlog works out of the box with sensible defaults, but you can customize:
 
 AIlog is built with modern development practices:
 
-- **TypeScript**: Full type safety and IntelliSense support
+### Technology Stack
+- **Monorepo**: pnpm workspaces for efficient dependency management
+- **TypeScript**: Full type safety across all packages
+- **React**: Modern dashboard with Ant Design components
+- **Vite**: Fast build tool for the dashboard
+- **Zustand**: Lightweight state management
 - **ESLint**: Code quality enforcement
-- **Modular Design**: Easy to extend and maintain
-- **Comprehensive Testing**: Manual testing with Extension Development Host
-- **Documentation**: Full JSDoc coverage for all APIs
+- **VS Code Integration**: Deep integration with VS Code themes and APIs
+
+### Available Scripts
+```bash
+# Build all packages
+pnpm build
+
+# Develop dashboard with hot reload
+pnpm dashboard:dev
+
+# Build and package extension
+pnpm extension:package
+
+# Run linting across all packages
+pnpm lint
+
+# Clean all build artifacts
+pnpm clean
+```
 
 ## Contributing
 

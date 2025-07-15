@@ -1,0 +1,14 @@
+{
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "extensions.autoUpdate": false,
+  "extensions.ignoreRecommendations": false,
+  "debug.allowBreakpointsEverywhere": true,
+  "debug.node.autoAttach": "disabled",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/out/**": true,
+    "**/dist/**": true
+  }
+}

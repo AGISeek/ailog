@@ -6,12 +6,27 @@
             "type": "extensionHost",
             "request": "launch",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}"
+                "--extensionDevelopmentPath=${workspaceFolder}/packages/extension"
             ],
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/packages/extension/out/**/*.js"
             ],
-            "preLaunchTask": "${defaultBuildTask}"
+            "preLaunchTask": "extension: compile"
+        },
+        {
+            "name": "Run Extension (Debug Dashboard)",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/packages/extension"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/packages/extension/out/**/*.js"
+            ],
+            "preLaunchTask": "build-all",
+            "env": {
+                "NODE_ENV": "development"
+            }
         }
     ]
 }
