@@ -99,7 +99,7 @@ ai-log/
 │   │   ├── src/
 │   │   │   ├── database.ts       # SQLite operations
 │   │   │   ├── extension.ts      # Main entry point
-│   │   │   └── dashboard-dist/   # Built React dashboard
+│   │   │   └── dashboard-dist/   # Built React dashboard (auto-generated)
 │   │   └── package.json
 │   ├── dashboard/                # React Dashboard (@ailog/dashboard)
 │   │   ├── src/

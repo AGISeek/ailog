@@ -2,3 +2,7 @@ node_modules
 out
 .history
 *.vsix
+*.tsbuildinfo
+
+# Dashboard build artifacts
+packages/extension/dashboard-dist/

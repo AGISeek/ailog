@@ -6,7 +6,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: '../dashboard-dist',
+    outDir: '../extension/dashboard-dist',
     emptyOutDir: true,
     rollupOptions: {
       output: {

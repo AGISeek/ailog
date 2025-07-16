@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Card, Table, Tag, Space, Typography, Empty } from 'antd';
+import { Card, Table, Tag, Space, Typography } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type { ColumnsType, TableProps } from 'antd/es/table';
@@ -137,22 +137,17 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
   ];
 
   const handleTableChange: TableProps<Commit>['onChange'] = (_, filters, sorterConfig) => {
-    console.log('🔍 TableChange - filters:', filters);
-    console.log('🔍 TableChange - sorterConfig:', sorterConfig);
-    
     // 处理排序 - 支持取消排序
     if (!Array.isArray(sorterConfig)) {
       if (sorterConfig.field) {
         // 如果有字段但没有排序顺序，表示取消排序
         if (!sorterConfig.order) {
-          console.log('🔄 Clearing sort');
           onSorterChange({
             field: undefined,
             order: undefined,
           });
         } else {
           // 正常排序
-          console.log('🔄 Setting sort:', sorterConfig.field, sorterConfig.order);
           onSorterChange({
             field: sorterConfig.field as string,
             order: sorterConfig.order,
@@ -160,7 +155,6 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
         }
       } else {
         // 没有字段，清除排序
-        console.log('🔄 Clearing sort (no field)');
         onSorterChange({
           field: undefined,
           order: undefined,
@@ -170,7 +164,6 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
 
     // 处理筛选器
     if (filters) {
-      console.log('🔍 Processing table filters:', filters);
       // 转换FilterValue到React.Key[]类型
       const convertedFilters: Record<string, React.Key[] | null> = {};
       Object.entries(filters).forEach(([key, value]) => {
@@ -182,7 +175,6 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
           convertedFilters[key] = [value] as React.Key[];
         }
       });
-      console.log('🔍 Converted filters:', convertedFilters);
       onTableFiltersChange(convertedFilters);
     }
   };
@@ -224,7 +216,7 @@ export const CommitsTable: React.FC<CommitsTableProps> = ({
         scroll={{ x: 'max-content' }}
         size="small"
         locale={{
-          emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('table.noData')} />
+          emptyText: t('table.noData')
         }}
       />
     </Card>

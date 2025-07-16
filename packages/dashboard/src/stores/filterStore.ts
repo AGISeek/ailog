@@ -104,7 +104,6 @@ export const useFilterStore = create<FilterState & FilterActions>()((set, get) =
   },
 
   setTableFilters: (tableFilters) => {
-    console.log('🏪 Store - Setting table filters:', tableFilters);
     set({ tableFilters });
     get().resetPagination();
   },

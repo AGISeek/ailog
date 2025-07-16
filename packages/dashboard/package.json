@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc -b && vite build --outDir ../../packages/extension/src/dashboard-dist",
+		"build": "tsc -b && vite build",
 		"preview": "vite preview",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",

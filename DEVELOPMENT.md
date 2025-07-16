@@ -54,16 +54,21 @@ pnpm vscode:prepublish    # Build everything for publishing
 ### 4. Development Workflow
 
 #### For Extension Development
-1. **Build Extension**: Run `pnpm extension:build`
-2. **Launch Extension**: Press `F5` to open Extension Development Host
-3. **Test Features**: Use the extension in the development environment
-4. **Debug**: Use VS Code's built-in debugger with breakpoints
+1. **Full Development**: Run `pnpm --filter extension run dev` (builds dashboard + watches extension)
+2. **Extension Only**: Run `pnpm --filter extension run dev:ext-only` (if dashboard already built)
+3. **Launch Extension**: Press `F5` to open Extension Development Host
+4. **Test Features**: Use the extension in the development environment
+5. **Debug**: Use VS Code's built-in debugger with breakpoints
 
 #### For Dashboard Development
-1. **Start Dev Server**: Run `pnpm dashboard:dev`
-2. **Hot Reload**: Changes are automatically reflected in the browser
-3. **Build for Extension**: Run `pnpm dashboard:build` to output to extension
-4. **Test Integration**: Package extension and test dashboard within VS Code
+**Option 1: Standalone Development (Recommended)**
+1. **Start Dev Server**: Run `pnpm --filter dashboard run dev`
+2. **Hot Reload**: Changes are automatically reflected at `http://localhost:3000`
+3. **Build for Extension**: Run `pnpm --filter dashboard build` when ready to test in VS Code
+
+**Option 2: Integrated Development**
+1. **Build Dashboard**: Run `pnpm --filter extension run dev` (builds dashboard + watches extension)
+2. **Test in VS Code**: Dashboard changes require rebuild to see in VS Code extension
 
 #### Full Integration Testing
 1. **Build All**: Run `pnpm build`

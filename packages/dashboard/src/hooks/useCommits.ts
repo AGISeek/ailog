@@ -37,7 +37,6 @@ export const useCommits = () => {
 
   // 应用筛选器
   const applyFilters = useCallback((commits: Commit[], filters: CommitFilters, tableFilters: Record<string, React.Key[] | null> = {}): Commit[] => {
-    console.log('🎯 Applying filters:', { filters, tableFilters });
     
     return commits.filter(commit => {
       // 日期范围筛选
@@ -104,28 +103,18 @@ export const useCommits = () => {
 
       // AI类型筛选
       if (tableFilters.is_ai_generated && tableFilters.is_ai_generated.length > 0) {
-        console.log('🤖 AI Type filter check:', { 
-          filterValues: tableFilters.is_ai_generated, 
-          commitValue: commit.is_ai_generated,
-          commitValueType: typeof commit.is_ai_generated
-        });
-        
         // 将筛选器值转换为boolean进行比较
         const selectedValues = tableFilters.is_ai_generated.map(val => {
-          const valAsAny = val as any;
-          if (valAsAny === true || valAsAny === 'true' || String(val) === 'true') return true;
-          if (valAsAny === false || valAsAny === 'false' || String(val) === 'false') return false;
+          const stringVal = String(val);
+          if (stringVal === 'true') return true;
+          if (stringVal === 'false') return false;
           return Boolean(val);
         });
         
-        console.log('🤖 Converted filter values:', selectedValues);
-        
         // 将commit的is_ai_generated值转换为boolean进行比较
         const commitIsAi = Boolean(commit.is_ai_generated);
-        console.log('🤖 Commit boolean value:', commitIsAi);
         
         if (!selectedValues.includes(commitIsAi)) {
-          console.log('🤖 Commit filtered out');
           return false;
         }
       }
@@ -223,9 +212,7 @@ export const useCommits = () => {
 
   // 当筛选条件变化时重新筛选数据
   useEffect(() => {
-    console.log('🔄 Refiltering commits:', { commitsCount: commits.length, filters, tableFilters });
     const filtered = applyFilters(commits, filters, tableFilters);
-    console.log('✅ Filtered result:', { filteredCount: filtered.length });
     setFilteredCommits(filtered);
   }, [commits, filters, tableFilters, applyFilters, setFilteredCommits]);
 
