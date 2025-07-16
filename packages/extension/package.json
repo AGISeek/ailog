@@ -81,11 +81,14 @@
 		}
 	},
 	"scripts": {
-		"build": "tsc -p ./",
-		"dev": "tsc -watch -p ./",
+		"build": "pnpm run build:dashboard && tsc -p ./",
+		"build:dashboard": "cd ../dashboard && pnpm run build",
+		"build:ext": "tsc -p ./",
+		"dev": "pnpm run build:dashboard && tsc -watch -p ./",
+		"dev:ext-only": "tsc -watch -p ./",
 		"lint": "eslint src --ext ts",
-		"clean": "rimraf out",
-		"package": "vsce package"
+		"clean": "rimraf out && rimraf dashboard-dist",
+		"package": "pnpm run build && vsce package"
 	},
 	"dependencies": {
 		"simple-git": "^3.22.0",

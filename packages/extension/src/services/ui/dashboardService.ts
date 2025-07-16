@@ -34,7 +34,7 @@ export class DashboardService {
             {
                 enableScripts: true,
                 localResourceRoots: [
-                    vscode.Uri.joinPath(context.extensionUri, 'src', 'dashboard-dist'),
+                    vscode.Uri.joinPath(context.extensionUri, 'dashboard-dist'),
                     vscode.Uri.joinPath(context.extensionUri, 'src'),
                     vscode.Uri.joinPath(context.extensionUri, 'node_modules'),
                     vscode.Uri.joinPath(context.extensionUri, 'l10n')
@@ -102,7 +102,7 @@ export class DashboardService {
      */
     private getWebviewContent(context: vscode.ExtensionContext, webview: vscode.Webview): string {
         // 指向React构建产物
-        const reactBuildPath = vscode.Uri.joinPath(context.extensionUri, 'src', 'dashboard-dist');
+        const reactBuildPath = vscode.Uri.joinPath(context.extensionUri, 'dashboard-dist');
         const htmlPath = vscode.Uri.joinPath(reactBuildPath, 'index.html');
         
         // 检查React构建产物是否存在
